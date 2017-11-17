@@ -1,0 +1,101 @@
+数据库学习 v-learn
+	1：
+		类型：  varchar 字符串
+	
+
+	2：SELECT * FROM yingxiong
+	SELECT 查询	*表示查询全部字段 yingxiong表名称
+	SELECT y_name,y_age FROM yingxiong   查询字段	
+	
+	条件查询：
+	SELECT y_name,y_age FROM yingxiong   WHERE y_sex = "女"  条件查询
+	
+	多条件查询：
+	SELECT * FROM yingxiong WHERE y_sex = "男" AND y_age>30  多条件 同时满足条件
+	SELECT * FROM yingxiong WHERE y_sex = "男" AND y_age>30 or y_type='adc'  or表示或者只需满足一个即可
+	
+	排序：默认正序 ASC
+	ORDER BY y_age DESC   DESC 倒序，ASC 正序
+	
+	区间查询 BETWEEN 
+	SELECT * FROM yingxiong WHERE y_age BETWEEN '18' AND '25'
+	
+	
+	SELECT * FROM yingxiong WHERE y_age in(18,25)   in表示等于 18 或者 28 相当于 
+	SELECT * FROM yingxiong WHERE y_age=18 or y_age 25
+	
+	
+	模糊查询 LIKE  '%模糊的内容%'    %% 表示占位  前面没有%则不匹配 李%  %李 
+		SELECT * FROM yingxiong WHERE y_name LIKE '%李%'   
+	
+	分页查询： 只能是int
+		SELECT * FROM yingxiong LIMIT 0,4   0表示从第0个开始，4表示给多少数据
+		
+		
+	组合查询
+		SELECT * FROM yingxiong WHERE y_age<30 ORDER BY y_age DESC
+		SELECT * FROM yingxiong WHERE y_age<30 AND y_name LIKE "%乔%"
+		SELECT * FROM yingxiong WHERE y_age<30 AND y_name LIKE "%乔%" ORDER BY y_age DESC LIMIT 0,1
+	
+	命名别名 as
+		SELECT y_name as 姓名 FROM yingxiong
+	
+	求最大值，最小值 min(y_age) avg(y_age) sum(y_age) count(y_age)数量  聚合函数
+		SELECT MAX(y_age) FROM yingxiong 
+		
+	子条件查询
+		SELECT * FROM yingxiong WHERE y_age = (SELECT MAX(y_age) from yingxiong)
+		SELECT * FROM yingxiong WHERE y_age in(SELECT MAX(y_age) from yingxiong)  集合
+		
+	分组查询 一般和聚合一起使用
+		SELECT * FROM yingxiong GROUP BY y_type
+		SELECT y_type,COUNT(y_type) FROM yingxiong GROUP BY y_type
+	
+	分组+条件查询： having表示条件，为分组函数的专用条件查询
+		SELECT y_type,SUM(y_age) as ageSum from yingxiong GROUP BY y_type HAVING ageSum>60
+		
+	建立关联表
+		date 年月日 time时分秒 datetime 年月日时分秒
+	
+	SELECT * FROM  wanjia,yingxiong  多表查询时
+		：多表查询时，如果不对结果进行过滤，则得到的是两表数据的乘积，此种形式成为笛卡尔乘积
+		
+		SELECT * FROM  wanjia,yingxiong WHERE wanjia.w_shouxuan = yingxiong.y_type
+	
+	left join    on关键字不能不加  左联查询
+		SELECT * FROM wanjia LEFT JOIN yingxiong ON wanjia.w_shouxuan = yingxiong.y_type
+	效果 ：以左表为准，右表数据匹配，有匹配数据则获取，如果左表有的数据，右表没有则以null填充，如果有表有的左表没有则过滤
+	
+	right join
+	
+	inner join
+		两边数据同时匹配
+		SELECT * FROM wanjia INNER JOIN yingxiong ON wanjia.w_shouxuan = yingxiong.y_type
+		两表数据同时匹配，有任意一边数据没有匹配，则过滤
+		
+	空值查询
+		SELECT * FROM yingxiong WHERE y_leader = ''
+		SELECT * FROM yingxiong WHERE y_leader = 'null'
+		
+		
+	插入：
+		INSERT INTO wanjia (w_id,w_name,w_birthday) VALUES ('6','爸爸','1920-10-05')
+	
+	更新：update table set 字段 ='值' where 主键 = ''  一定要指明修改的语句
+		UPDATE wanjia SET w_name = '西红柿'  WHERE w_id = 6
+		
+	修改：DELETE FROM wanjia WHERE w_id = 6
+	
+	视图：会随着查询的更改而更改，视图也会改变表，相互影响
+	
+	
+	索引：数据量大的时候很实用，如果没有建立索引，则会整个表查，id是默认加索引，索引消耗越多
+	名			字段	索引类型
+	name		Normal	0		
+
+	外键： 从表  级联
+	
+	触发器：可以定义触发器，在数据库插入或者刷新或者删除 之前或者之后 出发另外一个sql语句
+	触发器可以有多个最多只能有六个
+	
+	truncate table home_page 重新清除表
